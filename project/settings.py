@@ -61,9 +61,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'project.urls'
 
 AUTH_USER_MODEL = 'core.User'
-templates = "dist"
-if DEBUG:
-    templates = "templates"
+   
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -143,11 +141,10 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = (
 #     os.path.join(BASE_DIR, 'dist/static')
 # )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
-if DEBUG:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
-    )
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -155,3 +152,27 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'vue', 'webpack-stats.json')
     }
 }
+
+
+#production
+
+if not DEBUG:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'dist/static'),
+    )
+
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.join(BASE_DIR, 'dist')],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
+        },
+    ]
